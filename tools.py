@@ -156,3 +156,133 @@ add_function_to_class_tool = StructuredTool(
     ),
     args_schema=FunctionInput,
 )
+
+# Tool: Delete a class in the UML model
+def delete_class(class_name: str):
+    data_file_path = "uml/uml.json"
+
+    with open(data_file_path, "r") as datei:
+        data = json.load(datei)
+    
+    if not(class_name in data["classes"]):
+        return "Class does not exist in the diagram.uml file."
+    
+    del data["classes"][class_name]
+    
+    with open(data_file_path, "w") as datei:
+        json.dump(data, datei, indent=4)
+
+    return f"Deleted class {class_name} from diagram.uml file."
+
+delete_class_tool = Tool(
+    name="delete_class",
+    func=delete_class,
+    description="Deletes a class from the UML model. ",
+)
+
+# Tool: Delte attribute from a class
+def delete_attribute(attribute_name: str, class_name: str):
+    data_file_path = "uml/uml.json"
+
+    with open(data_file_path, "r") as datei:
+        data = json.load(datei)
+    
+    if not(class_name in data["classes"]):
+        return "Class does not exist in the diagram.uml file. Create it first."
+    
+    if "attributes" not in data["classes"][class_name]:
+        return "Class does not have any attributes."
+    else:
+        if attribute_name not in data["classes"][class_name]["attributes"]:
+            return "Attribute does not exist in the class."
+        else:
+            del data["classes"][class_name]["attributes"][attribute_name]
+    
+    with open(data_file_path, "w") as datei:
+        json.dump(data, datei, indent=4)
+
+    return f"Deleted attribute {attribute_name} from class {class_name} in diagram.uml file."
+
+class AttributesDelete(BaseModel):
+    attribute_name: str
+    class_name: str
+
+delete_attribute_tool = StructuredTool(
+    name="delete_attribute",
+    func=delete_attribute,
+    description=(
+        "Deletes an attribute from a class in the diagram.uml file. "
+        "Parameter 1 (attribute_name): The name of the attribute to be deleted. "
+        "Parameter 2 (class_name): The name of the class from which the attribute will be deleted. "
+        "Both parameters are required and must be class names that already exist in the UML diagram."
+    ),
+    args_schema=AttributesDelete,
+)
+
+# Tool: Delete a function from a class
+def delete_function(function_name: str, class_name: str):
+    data_file_path = "uml/uml.json"
+
+    with open(data_file_path, "r") as datei:
+        data = json.load(datei)
+    
+    if not(class_name in data["classes"]):
+        return "Class does not exist in the diagram.uml file. Create it first."
+    
+    if not("functions" in data["classes"][class_name]):
+        return "Class does not have any functions."
+    else:
+        if function_name not in data["classes"][class_name]["functions"]:
+            return "Function does not exist in the class."
+        else:
+            del data["classes"][class_name]["functions"][function_name]
+    
+    with open(data_file_path, "w") as datei:
+        json.dump(data, datei, indent=4)
+
+    return f"Added function {function_name} to class {class_name} in diagram.uml file."
+
+delete_function_tool = StructuredTool(
+    name="delete_function",
+    func=delete_function,
+    description=(
+        "Deletes a function from a class in the diagram.uml file. "
+        "Parameter 1 (function_name): The name of the function to be deleted. "
+        "Parameter 2 (class_name): The name of the class from which the function will be deleted. "
+        "Both parameters are required and must be class names that already exist in the UML diagram."
+    ),
+    args_schema=FunctionInput,
+)
+
+# Tool: Delete a connection between two classes
+def delete_connection(connection_from_first_class: str, connection_to_second_class: str):
+    data_file_path = "uml/uml.json"
+
+    with open(data_file_path, "r") as datei:
+        data = json.load(datei)
+    
+    if not(connection_from_first_class in data["classes"]):
+        return "Class from which the connection starts does not exist in the diagram.uml file. Create it first."
+    if not(connection_to_second_class in data["classes"]):
+        return "Class to which the connection points does not exist in the diagram.uml file. Create it first."
+    
+    if connection_to_second_class not in data["classes"][connection_from_first_class]["connections"]:
+        return "Connection does not exist in the diagram.uml file."
+    del data["classes"][connection_from_first_class]["connections"][connection_to_second_class]
+
+    with open(data_file_path, "w") as datei:
+        json.dump(data, datei, indent=4)
+
+    return f"Deleted connection between {connection_to_second_class} to {connection_from_first_class} in diagram.uml file."
+
+delete_connection_tool = StructuredTool(
+    name="delete_connection",
+    func=delete_connection,
+    description=(
+        "Deletes a connection between two classes in the diagram.uml file. "
+        "Parameter 1 (connection_from_first_class): The class from which the connection starts. "
+        "Parameter 2 (connection_to_second_class): The class to which the connection points. "
+        "Both parameters are required and must be class names that already exist in the UML diagram."
+    ),
+    args_schema=ConnectionInput,
+)
