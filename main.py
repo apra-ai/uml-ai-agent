@@ -15,6 +15,19 @@ from tools import (
     get_uml_diagram_tool,
     add_attribute_to_class_tool,
     add_function_to_class_tool,
+    delete_class_tool,
+    delete_attribute_tool,
+    delete_function_tool,
+    delete_connection_tool,
+    delete_attribute,
+    delete_connection,
+    delete_function,
+    delete_class,
+    create_class,
+    create_connection,
+    add_attribute_to_class,
+    add_function_to_class,
+    get_uml_diagram,
 )
 from plantuml import PlantUML
 import json
@@ -31,6 +44,10 @@ tools_available = [
     get_uml_diagram_tool,
     add_attribute_to_class_tool,
     add_function_to_class_tool,
+    delete_class_tool,
+    delete_attribute_tool,
+    delete_function_tool,
+    delete_connection_tool
 ]
 
 # Create a Pydantic model for the agent's response
