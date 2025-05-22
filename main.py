@@ -86,7 +86,6 @@ def ai_agent():
         # Invoke the agent with the current query and chat history
         raw_response = agent_executor.invoke({"query": query, "chat_history": chat_history})
         output = raw_response.get("output")[0]["text"]
-        print(output)
         # Detect if the agent is asking a follow-up question
         if "?" in output or "please provide" in output.lower():
             user_reply = input("Your answer: ")
