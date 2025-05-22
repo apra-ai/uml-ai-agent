@@ -31,7 +31,6 @@ It combines OpenAI or Anthropic LLMs, LangChain tools, and PlantUML for a seamle
 
 ## Technologies Used
 
-- Python 3
 - [LangChain](https://github.com/langchain-ai/langchain)
 - [OpenAI](https://platform.openai.com/) or [Anthropic](https://www.anthropic.com/)
 - [PlantUML](https://plantuml.com/)
